@@ -1,0 +1,40 @@
+/*
+** This example reproduces the results from Table 3.7 in
+** "Introduction to Statistical Learning" by James, et al
+*/ 
+
+new;
+cls;
+
+// Get file name with full path
+fname = __FILE_DIR $+ "../data/credit.csv";
+
+/*
+** Estimate parameters: Male = 1, Female = 0
+**
+** cat(gender) tells GAUSS to reclassify the 'gender' variable
+**             from "Male", "Female" to numeric categories 1, 0.
+**             Since "Female" comes before "Male" alphabetically
+**             "Female" is assigned to 0.
+**
+** factor(cat(gender)) Wrapping cat(gender) in 'factor'
+**                     tells GAUSS to make dummy variables and
+**                     to make the variable name 'gender: Male'
+*/
+call olsmt(fname, "balance ~ factor(cat(gender))");
+
+print "";
+
+/*
+** Estimate parameters: Male = 0, Female = 1
+**
+** Reverse the order of the dummy variable by using a custom proc.
+**
+** The dollar sign before 'gender' tells GAUSS to load it as a string
+** column and pass it to our custom proc 'isfemale'
+*/
+call olsmt(fname, "balance ~ isfemale($gender)");
+
+proc (1) = isfemale(s);
+    retp(s .$== "Female");
+endp;

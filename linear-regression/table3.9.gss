@@ -1,0 +1,16 @@
+/*
+** This example reproduces the results from Table 3.9 in
+** "Introduction to Statistical Learning" by James, et al
+*/ 
+new;
+cls;
+
+// Get file name with full path
+fname = __FILE_DIR $+ "../data/advertising.csv";
+
+/*
+** Estimate parameters for model:
+**
+** Sales = intercept + b_1 * TV + b_2 * radio + b_3 * (TV .* radio) + epsilon
+*/
+call olsmt(fname, "sales ~ TV*radio");

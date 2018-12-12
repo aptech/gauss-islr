@@ -1,0 +1,33 @@
+/*
+** This example reproduces the results from Table 3.10 in
+** "Introduction to Statistical Learning" by James, et al
+*/ 
+new;
+cls;
+
+// Get file name with full path
+fname = __FILE_DIR $+ "../data/auto.csv";
+
+/*
+** Method 1: Specify square as an interaction effect
+** 
+** Estimate parameters for model:
+**
+** mpg = intercept + b_1 * horsepower  + b_2 * (horsepower .* horsepower) + epsilon
+*/
+call olsmt(fname, "mpg ~ horsepower*horsepower");
+
+print "";
+
+/*
+** Method 2: Use proc to create squared variable
+** 
+** Estimate parameters for model:
+**
+** mpg = intercept + b_1 * horsepower  + b_2 * (horsepower .* horsepower) + epsilon
+*/
+call olsmt(fname, "mpg ~ horsepower + square(horsepower)");
+
+proc (1) = square(x);
+    retp(x.^2);
+endp;

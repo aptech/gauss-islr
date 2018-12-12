@@ -1,0 +1,28 @@
+/*
+** This example reproduces the results from Table 3.11 in
+** "Introduction to Statistical Learning" by James, et al
+*/ 
+
+new;
+cls;
+
+// Get file name with full path
+fname = __FILE_DIR $+ "../data/credit.csv";
+
+/*
+** Estimate model:
+**
+** balance = intercept + b_0 * age + b_1 * limit + epsilon
+*/
+print "Model 1";
+call olsmt(fname, "balance ~ age + limit");
+
+print "";
+
+/*
+** Estimate model:
+**
+** balance = intercept + b_0 * rating + b_1 * limit + epsilon
+*/
+print "Model 2:";
+call olsmt(fname, "balance ~ rating + limit");

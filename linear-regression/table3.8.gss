@@ -1,0 +1,26 @@
+/*
+** This example reproduces the results from Table 3.8 in
+** "Introduction to Statistical Learning" by James, et al
+*/ 
+
+new;
+cls;
+
+// Get file name with full path
+fname = __FILE_DIR $+ "../data/credit.csv";
+
+/*
+** Estimate parameters: Base case: "African American" and dummy
+**                      variables for "Asian" and "Caucasian".
+**
+** cat(ethnicity) tells GAUSS to reclassify the 'gender' variable
+**             from "Male", "Female" to numeric categories 1, 0.
+**             Since "Female" comes before "Male" alphabetically
+**             "Female" is assigned to 0.
+**
+** factor(cat(ethnicity)) Wrapping cat(ethnicity) in 'factor'
+**                     tells GAUSS to make dummy variables and
+**                     to make the variable names "ethnicity: Asian"
+**                     and "ethnicity: Caucasian"
+*/
+call olsmt(fname, "balance ~ factor(cat(ethnicity))");
