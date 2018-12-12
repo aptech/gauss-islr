@@ -1,0 +1,10 @@
+/*
+** This example reproduces the results from Tables 3.4 and 3.6 in
+** "Introduction to Statistical Learning" by James, et al
+*/ 
+
+// Get file name with full path
+fname = __FILE_DIR $+ "../data/advertising.csv";
+
+// Estimate parameters and print report
+call olsmt(fname, "Sales ~ .");
