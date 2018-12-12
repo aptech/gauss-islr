@@ -1,0 +1,23 @@
+/*
+** This example reproduces the results from Table 4.1 in
+** "Introduction to Statistical Learning" by James, et al
+*/ 
+
+new;
+cls;
+
+// Get file name with full path
+fname = __FILE_DIR $+ "../data/default.csv";
+
+/*
+** Estimate model:
+**
+** balance = intercept + b_0 * balance + epsilon
+**
+** factor(cat(default)) Wrapping cat(default) in 'factor'
+**                      tells GAUSS to make dummy variables and
+**                      to make the dependent variable name 
+**                      'default: Yes'
+*/
+
+call glm(fname, "factor(cat(default)) ~ balance", "binomial");

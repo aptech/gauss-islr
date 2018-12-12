@@ -1,0 +1,34 @@
+/*
+** This example reproduces the results from Table 4.2 in
+** "Introduction to Statistical Learning" by James, et al
+*/ 
+
+new;
+cls;
+
+// Get file name with full path
+fname = __FILE_DIR $+ "../data/default.csv";
+
+/* NOTE:
+** 
+** The parameter estimate for 'income' in the book is 0.0030. However,
+** the estimate computed from R using the 'Default' dataset from the
+** official R ISLR package is '3.033e-06'
+*/
+
+/*
+** Estimate model:
+**
+** balance = intercept + b_0 * balance + epsilon
+**
+** factor(cat(default)) Wrapping cat(default) in 'factor'
+**                      tells GAUSS to make dummy variables and
+**                      to make the dependent variable name 
+**                      'default: Yes'
+**
+** factor(cat(student)) Wrapping cat(student) in 'factor'
+**                      tells GAUSS to make dummy variables and
+**                      to make the label to be 'student: Yes'
+*/
+
+call glm(fname, "factor(cat(default)) ~ balance + income + factor(cat(student))", "binomial");
