@@ -1,0 +1,34 @@
+/*
+** This example reproduces the results from the first code in
+** section 4.6.2 from "Introduction to Statistical Learning" by James, et al
+*/ 
+
+new;
+cls;
+
+// Get file name with full path
+fname = __FILE_DIR $+ "../data/smarket.csv";
+
+/*
+** Estimate model:
+**
+** balance = intercept + b_0 * balance + epsilon
+**
+** factor(cat(Direction)) Wrapping cat(default) in 'factor'
+**                      tells GAUSS to make dummy variables and
+**                      to make the dependent variable name 
+**                      'Direction: Up'
+**
+*/
+
+struct glmOut glm_fit;
+
+glm_fit = glm(fname, "factor(cat(Direction)) ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume", "binomial");
+
+// Print coeficient values
+/*
+** NOTE: The procedure below is defined
+**       in the file 'simple_table.src'
+**       located in the ISLR src directory.
+*/
+coef(glm_fit);
