@@ -1,0 +1,73 @@
+#include dynargs.dec
+#include glm.sdf
+
+proc (0) = coef(struct glmOut glm_fit);
+    call simpleTable(glm_fit.coef.estimates', glm_fit.modelInfo.xNames');
+endp;
+
+proc (0) = simpleTable(X, col_header, ...);
+    local sep, tmpb, max_len, col_head_fmt, num_fmt, row_head_fmt, spaces, rname_len, cname_len,
+        has_rowheader, row_header;
+    
+    has_rowheader = COUNT_DYNARGS;
+    if has_rowheader;
+        row_header = ...;
+    endif;
+    
+    format /sa 12,255;
+    if has_rowheader;
+        rname_len = maxc(strlen(row_header));
+    endif;
+    cname_len = maxc(strlen(col_header'));
+    
+    // We will truncate any variable
+    // names longer than this
+    max_len = 12;
+    
+    if has_rowheader;
+        if max_len < rname_len;
+            rname_len = max_len;
+        endif;
+    endif;
+    
+    if max_len < cname_len;
+        cname_len = max_len;
+    endif;
+    
+    // Column headers are right aligned
+    // Row headers are left aligned and followed by ' |'
+    col_head_fmt = "%"$+ntos(cname_len)$+"."$+ntos(cname_len)$+"s";
+    if has_rowheader;
+        row_head_fmt = "%-"$+ntos(rname_len)$+"."$+ntos(rname_len)$+"s"$+" |";
+    endif;
+    
+    
+    col_header = satostrC(col_header, col_head_fmt);
+    
+    // Numbers should be printed with up to 4
+    // digits of precision and in their most compact form
+    num_fmt = "%"$+ntos(cname_len)$+".4g";
+    
+    // Dashes '---' below each column header
+    sep = reshape(chrs(45*ones(1,cname_len)), 1, cols(col_header));
+    
+    if has_rowheader;
+        // Spaces for the first two rows of the first column
+        // to the left of the column headers and the row of
+        // dashes '----' beneath the column header
+        spaces = chrs(32*ones(1,rname_len+1));
+        
+        row_header = spaces $|spaces $|(satostrC(row_header,row_head_fmt));
+    endif;
+    
+    tmpb = (col_header$|sep$|ftostrc(x, num_fmt));
+    
+    if has_rowheader;
+        print (row_header $~ tmpb);
+    else;
+        print tmpb;
+    endif;
+    
+    // Return format back to default setting
+    format /sa 16,16;
+endp;
